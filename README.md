@@ -1,18 +1,70 @@
-## Getting Started
+#概要
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+名称：魚釣りゲーム
 
-## Folder Structure
+ルール
+１：プレイヤーは魚と駆け引きをして、釣り上げたら（距離を０にする）ゲームクリア。
 
-The workspace contains two folders by default, where:
+２：魚はスタミナがなくなると１ターン疲労で動けない。
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+３：距離が０になると同時に食いつき度も０になった場合、ゲームクリアとする。
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+４：距離が５００以上になるかプレイヤーの食いつき度が０になった場合ゲームオーバー。また、プレイヤーがコマンド『諦める』を選択した場合もゲームオーバーとなる。
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+５：食いつき度とスタミナは初期値までしか回復しない。
 
-## Dependency Management
+６：魚が暴れると食いつき度が減るが、そのターンに竿を緩めていた場合は減らない。
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+
+各クラスの説明
+
+Action class：
+Rest,EnemyActions,PlayerActions classのポリモーフィズムもと。Actionを実行するキャラクターと、影響を受けるキャラクターを決める。
+
+EnemyActions class：
+魚の行動の選択肢の設計。
+
+EnemyRampage class：
+魚の行動の一つ『暴れる』の設計。
+
+PlayerActions class：
+プレイヤーの行動の選択肢の設計。
+
+Rest class：
+プレイヤーの行動の一つ、竿を緩めるを追加する。
+
+Lose class：
+プレイヤーの行動の一つ、諦める（ゲームオーバー）を追加する。スタミナが０になると強制的にこの行動が選択される。
+
+
+
+Command class：
+プレイヤーの行動の選択肢をプロンプトに表示し、決定させる。
+
+
+Character class：
+プレイヤーと魚のステータスと、挙動を決める。
+
+Enemy class：
+魚のとる挙動を決める。また、魚の取れる行動を追加する。
+
+Player class：
+プレイヤーのとる挙動を決める。また、ゲームオーバーの条件の、『スタミナが０以下』と『距離が５００以上」を設定している。
+
+
+Game class：
+ゲームの1ターンごとの進み方を決める。また、プレイヤーと魚を追加し、プレイヤーの行動の選択肢を追加する。
+
+Main class：
+ゲームを開始し、終了条件を設定する。
+
+
+ステータスについて：
+プロンプトに表示されている『距離』はプレイヤーが持つ値。初期値は　100〜199の間でランダム。
+『食いつき（設計上の問題でコード上ではstaminaに格納される）』はプレイヤーが持ち、初期値は１００。
+
+『スタミナ(stamina)』は魚がもち、「お魚さん」「でかいお魚さん」「巨大なお魚さん」それぞれ４０、５０、８０。
+
+プレイヤーが一度に引っ張れる距離と減少する食いつき度はコマンドごとに設定されている（コマンドが独自に持っている）。
+魚が一度に逃げられる距離は魚ごとに設定された str を参照し、コマンドごとに倍率を設定している。
+魚が暴れて、一度に減る食いつき度は、魚のstrを参照。
