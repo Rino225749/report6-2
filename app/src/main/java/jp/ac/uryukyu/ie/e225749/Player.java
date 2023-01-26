@@ -17,7 +17,7 @@ public class Player extends Character {
             System.exit(0);
         }
         //ゲームオーバーの条件『距離が離れすぎ』を満たしたときの挙動
-        if(hp>=500){
+        if(hp>=500 || stamina<=0){
             System.out.println(name + "は魚を逃した。");
             System.out.println("ゲームオーバー");
             System.exit(0);
@@ -32,9 +32,9 @@ public class Player extends Character {
        if(stamina>0){
         var command_number = command_selector.waitForUsersCommand("コマンド？");
         actions.get(command_number).execute(this, targets.get(0));
-       }else{
+       }/*else{
         actions.get(2).execute(this, targets.get(0));
-       }
+       }*/
        /*if(stamina >= 100){
         stamina = 100;
         }*/
